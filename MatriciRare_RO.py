@@ -54,13 +54,15 @@ def getAandBfromTxt(a):
 
 def suma(A, B):
     result = []
-    length1A = len(A)  # nr de linii din A
-    length1B = len(B)  # nr de linii din B
+    length1A = len(A)  # Nr de linii din A
+    length1B = len(B)  # Nr de linii din B
     i = 0
     j = 0
     while i < length1A and j < length1B:
-        linieA = A[i][0][1]
-        linieB = B[j][0][1]
+        linieA = A[i][0][1]  # Valoarea liniei din matricea rara A
+        linieB = B[j][0][1]  # Valoarea liniei din matricea rara B
+
+        # Daca valorile liniilor nu coincid putem adauga direct una din ele in matricea rezultat
         if linieA < linieB:
             result.append(A[i])
             i += 1
@@ -68,7 +70,8 @@ def suma(A, B):
             if linieB < linieA:
                 result.append(B[j])
                 j += 1
-            else:  # linieA == linieB
+            else:
+                # Daca ele coincid trebuie sa le parcurgem si sa calculam elementele liniei sumateł
                 temp = []
                 length2A = len(A[i])
                 length2B = len(B[j])
@@ -117,10 +120,11 @@ def suma(A, B):
 
 def restructMatrix(Mat):
     reMat = []  # Matricea transpusa
-    for lista in Mat:  # For pt fiecare lista de tip linie (vector de tuple)
-        for element in lista:  # For pt fiecare tuplu din lista
+    for lista in Mat:  # Pentru fiecare lista de tip linie (vector de tuple)
+        for element in lista:  # Pentru fiecare tuplu din lista
             coloana = element[2]  # Preiau coloana din tuplu
-            # Preiau lungimea actuala a matricii transpuse = nr de coloane facute pana in prezent , len([]) = 0
+            # Preiau lungimea actuala a matricii transpuse = nr de coloane facute pana in prezent
+            # len([]) = 0
             l = len(reMat)
 
             # Cautam pozitia in matricea transpusa reMat a listei de tip coloana corespunzatoare,
@@ -131,14 +135,18 @@ def restructMatrix(Mat):
                 ok = 1
                 if reMat[i][0][2] == coloana:
                     # Daca am gasit o lista de tip coloana care respecta ce e scris mai sus, ma opresc,
-                    # astfel cand ies din while i va fi indicele in matricea transpusa reMat a listei de tip coloana unde va fi inserat noul element
+                    # astfel cand ies din while i va fi indicele in matricea transpusa reMat
+                    # a listei de tip coloana unde va fi inserat noul element
                     break
                 else:
-                    # Daca nu respecta mergem mai departe pana cand verificam toate listele de tip coloana existente pana in pasul curent in reMat
+                    # Daca nu respecta mergem mai departe pana cand verificam toate listele de tip coloana
+                    # existente pana in pasul curent in reMat
                     i += 1
-            
-            # Daca i=0 inseamna ca nu ai intrat in while si chestia asta se poate intampla doar la primul element(tuplu) citit din Mat
-            # Daca i=l inseamna ca a iesit din while si nu a gasit inca o lista tip coloana corespunzatoare celui de-al 3-lea camp din element(tuplu)
+
+            # Daca i=0 inseamna ca nu ai intrat in while si chestia asta se poate intampla
+            # doar la primul element(tuplu) citit din Mat
+            # Daca i=l inseamna ca a iesit din while si nu a gasit inca o lista tip coloana
+            # corespunzatoare celui de-al 3-lea camp din element(tuplu)
             if ok == 0 or i == l:  # Nu exista inca in lista reMat o lista corespunzatoare coloanei "coloana"
                 temp = []  # Se face o noua lista de tip coloana
                 # Elementul(tuplu) se insereaza in lista mai sus creata
@@ -146,30 +154,35 @@ def restructMatrix(Mat):
                 # Intreaga lista se insereaza in matricea transpusa reMat
                 reMat.append(temp)
             else:
-                # Daca i e undeva la mijloc elementul(tuplul) se insereaza in lista de tip coloana de la pozitia i in matricea transpusa
+                # Daca i e undeva la mijloc elementul(tuplul) se insereaza in lista de tip coloana
+                # de la pozitia i in matricea transpusa
                 reMat[i].append(element)
 
     reMat = sorted(reMat, key=lambda x: x[0][2])
-    # Sortez lista de liste de tip coloana dupa coloane adica din fiecare lista interioara iau primu element si vad a treia componeneta din tuplu
+    # Sortez lista de liste de tip coloana dupa coloane
+    # adica din fiecare lista interioara iau primu element si vad a treia componeneta din tuplu
     return reMat
 
 
 def inmultire(A, B):
     result = []
-    length1A = len(A)
-    length1B = len(B)
+    length1A = len(A)  # Nr de linii din A
+    length1B = len(B)  # Nr de linii din B
     i = 0
     while i < length1A:
         temp = []
-        linia = A[i][0][1]
+        linia = A[i][0][1]  # Valoarea liniei din matricea rara A
         j = 0
         while j < length1B:
-            coloana = B[j][0][2]
+            coloana = B[j][0][2]  # Valoarea coloanei din matricea rara B
             suma = 0
             length2A = len(A[i])
             length2B = len(B[j])
             ii = 0
             jj = 0
+
+            # Parcurgem cele doua liste de tuple - linia din A si coloana din B -
+            # si calculam elementele listei rezultat
             while ii < length2A and jj < length2B:
                 if A[i][ii][2] < B[j][jj][1]:
                     ii += 1
@@ -177,6 +190,8 @@ def inmultire(A, B):
                     if A[i][ii][2] > B[j][jj][1]:
                         jj += 1
                     else:
+                        # Adunam la suma produsul elementelor doar in cazul in care linia din A corespunde coloanei din B,
+                        # in rest produsul elementelor ar fi 0
                         suma += A[i][ii][0]*B[j][jj][0]
                         ii += 1
                         jj += 1
@@ -233,7 +248,7 @@ def checkMequalsb(A, b):
 
 if __name__ == "__main__":
 
-# Citirea matricilor A si B
+    # Citirea matricilor A si B
 
     a = open("a.txt")
     n1, structMatrixA, b1 = getAandBfromTxt(a)
